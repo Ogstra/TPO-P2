@@ -1,0 +1,47 @@
+{
+  "paquetes": [
+    {
+      "id": "P-002",
+      "peso": 62.0,
+      "destino": "Rosario",
+      "urgente": false,
+      "tipoContenido": "Alimento",
+      "contenido": {
+        "descripcion": "Heladera portatil con vacunas",
+        "refrigerado": true
+      }
+    },
+    {
+      "id": "P-003",
+      "peso": 4.2,
+      "destino": "Mendoza",
+      "urgente": true,
+      "tipoContenido": "Fragil",
+      "contenido": {
+        "descripcion": "Cristaleria de laboratorio"
+      }
+    },
+    {
+      "id": "P-001",
+      "peso": 12.5,
+      "destino": "Cordoba",
+      "urgente": false,
+      "tipoContenido": "Electronica",
+      "contenido": {
+        "descripcion": "Notebook",
+        "asegurado": true
+      }
+    },
+    {
+      "id": "P-204",
+      "peso": 23.0,
+      "destino": "CABA",
+      "urgente": false,
+      "tipoContenido": "Alimento",
+      "contenido": {
+        "descripcion": "Galletitas",
+        "refrigerado": false
+      }
+    }
+  ]
+}

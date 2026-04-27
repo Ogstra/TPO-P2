@@ -1,0 +1,97 @@
+package ar.edu.uade.logistica.tda;
+
+import java.util.ArrayList;
+import java.util.NoSuchElementException;
+
+public class Cola<T> {
+    private Nodo<T> primero;
+    private Nodo<T> ultimo;
+    private int cantidad;
+
+    public void encolar(T valor) {
+        Nodo<T> nuevo = new Nodo<>(valor);
+        if (estaVacia()) {
+            primero = nuevo;
+        } else {
+            ultimo.siguiente = nuevo;
+        }
+        ultimo = nuevo;
+        cantidad++;
+    }
+
+    public T desencolar() {
+        if (estaVacia()) {
+            throw new NoSuchElementException("La cola esta vacia");
+        }
+        T valor = primero.valor;
+        primero = primero.siguiente;
+        if (primero == null) {
+            ultimo = null;
+        }
+        cantidad--;
+        return valor;
+    }
+
+    public T verPrimero() {
+        if (estaVacia()) {
+            throw new NoSuchElementException("La cola esta vacia");
+        }
+        return primero.valor;
+    }
+
+    public boolean quitar(T valor) {
+        Nodo<T> actual = primero;
+        Nodo<T> anterior = null;
+
+        while (actual != null) {
+            if (actual.valor.equals(valor)) {
+                if (anterior == null) {
+                    primero = actual.siguiente;
+                } else {
+                    anterior.siguiente = actual.siguiente;
+                }
+
+                if (actual == ultimo) {
+                    ultimo = anterior;
+                }
+
+                cantidad--;
+                return true;
+            }
+
+            anterior = actual;
+            actual = actual.siguiente;
+        }
+
+        return false;
+    }
+
+    public boolean estaVacia() {
+        return primero == null;
+    }
+
+    public int tamanio() {
+        return cantidad;
+    }
+
+    public ArrayList<T> verPrimeros(int limite) {
+        ArrayList<T> valores = new ArrayList<>();
+        Nodo<T> actual = primero;
+
+        while (actual != null && valores.size() < limite) {
+            valores.add(actual.valor);
+            actual = actual.siguiente;
+        }
+
+        return valores;
+    }
+
+    private static class Nodo<T> {
+        private T valor;
+        private Nodo<T> siguiente;
+
+        private Nodo(T valor) {
+            this.valor = valor;
+        }
+    }
+}
