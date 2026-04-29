@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InventarioLoader {
-        private Gson gson = new Gson();
+    private static final Gson gson = new Gson();
 
     public ArrayList<Paquete<Contenido>> cargarPaquetes(String archivo) throws IOException {
         try (FileReader reader = new FileReader(archivo)) {
@@ -84,13 +84,13 @@ public class InventarioLoader {
 
     private String obtenerTipoContenido(Contenido contenido) {
         if (contenido instanceof Electronica) {
-            return "Electronica";
+            return "electronica";
         }
         if (contenido instanceof Alimento) {
-            return "Alimento";
+            return "alimento";
         }
         if (contenido instanceof Fragil) {
-            return "Fragil";
+            return "fragil";
         }
         throw new IllegalArgumentException("Tipo de contenido no soportado: " + contenido.getClass().getSimpleName());
     }

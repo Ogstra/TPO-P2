@@ -7,9 +7,6 @@ public class Paquete<T> {
     private boolean urgente;
     private T contenido;
 
-    public Paquete() {
-    }
-
     public Paquete(String id, double peso, String destino, boolean urgente, T contenido) {
         if (id == null || id.isBlank()) {
             throw new IllegalArgumentException("El id del paquete es obligatorio");

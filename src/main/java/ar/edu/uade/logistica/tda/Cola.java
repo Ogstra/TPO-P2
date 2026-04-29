@@ -39,33 +39,6 @@ public class Cola<T> {
         return primero.valor;
     }
 
-    public boolean quitar(T valor) {
-        Nodo<T> actual = primero;
-        Nodo<T> anterior = null;
-
-        while (actual != null) {
-            if (actual.valor.equals(valor)) {
-                if (anterior == null) {
-                    primero = actual.siguiente;
-                } else {
-                    anterior.siguiente = actual.siguiente;
-                }
-
-                if (actual == ultimo) {
-                    ultimo = anterior;
-                }
-
-                cantidad--;
-                return true;
-            }
-
-            anterior = actual;
-            actual = actual.siguiente;
-        }
-
-        return false;
-    }
-
     public boolean estaVacia() {
         return primero == null;
     }

@@ -73,10 +73,6 @@ public class MenuPrincipal {
 
     private void cargarInventarioInicial() {
         try {
-            if (!centro.estaVacio()) {
-                return;
-            }
-
             cargarJson();
             System.out.println("Inventario cargado automaticamente desde " + rutaInventario);
         } catch (RuntimeException | IOException e) {
@@ -86,8 +82,8 @@ public class MenuPrincipal {
 
     private void cargarJson() throws IOException {
         ArrayList<Paquete<Contenido>> paquetes = inventarioLoader.cargarPaquetes(rutaInventario);
-        for (int i = 0; i < paquetes.size(); i++) {
-            centro.recibir(paquetes.get(i));
+        for (Paquete<Contenido> paquete : paquetes) {
+            centro.recibir(paquete);
         }
     }
 
