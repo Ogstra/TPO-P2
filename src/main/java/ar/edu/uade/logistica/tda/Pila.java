@@ -40,7 +40,7 @@ public class Pila<T> {
         private T valor;
         private Nodo<T> siguiente;
 
-        public Nodo(T valor, Nodo<T> siguiente) {
+        private Nodo(T valor, Nodo<T> siguiente) {
             this.valor = valor;
             this.siguiente = siguiente;
         }
