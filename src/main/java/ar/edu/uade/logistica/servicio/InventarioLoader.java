@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InventarioLoader {
-    private Gson gson = new Gson();
+        private Gson gson = new Gson();
 
     public ArrayList<Paquete<Contenido>> cargarPaquetes(String archivo) throws IOException {
         try (FileReader reader = new FileReader(archivo)) {

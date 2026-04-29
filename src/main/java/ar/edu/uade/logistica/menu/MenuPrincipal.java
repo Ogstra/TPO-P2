@@ -34,11 +34,10 @@ public class MenuPrincipal {
         System.out.println();
         System.out.println("Logi UADE 2026 - Iteracion 1");
         System.out.println("1. Crear paquete manual");
-        System.out.println("2. Procesar siguiente paquete del centro");
-        System.out.println("3. Cargar siguiente paquete al camion");
-        System.out.println("4. Deshacer ultima carga del camion");
-        System.out.println("5. Ver estado");
-        System.out.println("6. Listar proximos 10 paquetes");
+        System.out.println("2. Cargar siguiente paquete al camion");
+        System.out.println("3. Deshacer ultima carga del camion");
+        System.out.println("4. Ver estado");
+        System.out.println("5. Listar proximos 10 paquetes");
         System.out.println("0. Salir");
     }
 
@@ -49,18 +48,15 @@ public class MenuPrincipal {
                     crearPaqueteManual();
                     break;
                 case 2:
-                    procesarSiguiente();
-                    break;
-                case 3:
                     cargarCamion();
                     break;
-                case 4:
+                case 3:
                     deshacerCarga();
                     break;
-                case 5:
+                case 4:
                     mostrarEstado();
                     break;
-                case 6:
+                case 5:
                     listarProximosPaquetes();
                     break;
                 case 0:
@@ -107,13 +103,6 @@ public class MenuPrincipal {
         centro.recibir(paquete);
         guardarCentroEnJson();
         System.out.println("Paquete recibido en el centro");
-        mostrarPaqueteEnTabla(paquete);
-    }
-
-    private void procesarSiguiente() throws IOException {
-        Paquete<Contenido> paquete = centro.procesarSiguiente();
-        guardarCentroEnJson();
-        System.out.println("Procesado:");
         mostrarPaqueteEnTabla(paquete);
     }
 
