@@ -9,6 +9,7 @@ public class ColaPrioridadPaquetes<T> {
     private Cola<Paquete<T>> prioritarios = new Cola<>();
     private Cola<Paquete<T>> estandar = new Cola<>();
 
+    // O(1)
     public void encolar(Paquete<T> paquete) {
         if (paquete.requierePrioridad()) {
             prioritarios.encolar(paquete);
@@ -17,6 +18,7 @@ public class ColaPrioridadPaquetes<T> {
         }
     }
 
+    // O(1)
     public Paquete<T> desencolar() {
         if (!prioritarios.estaVacia()) {
             return prioritarios.desencolar();
@@ -27,6 +29,7 @@ public class ColaPrioridadPaquetes<T> {
         throw new NoSuchElementException("No hay paquetes para procesar");
     }
 
+    // O(1)
     public Paquete<T> verSiguiente() {
         if (!prioritarios.estaVacia()) {
             return prioritarios.verPrimero();
@@ -37,14 +40,17 @@ public class ColaPrioridadPaquetes<T> {
         throw new NoSuchElementException("No hay paquetes para procesar");
     }
 
+    // O(1)
     public boolean estaVacia() {
         return prioritarios.estaVacia() && estandar.estaVacia();
     }
 
+    // O(1)
     public int tamanio() {
         return prioritarios.tamanio() + estandar.tamanio();
     }
 
+    // O(n)
     public ArrayList<Paquete<T>> verProximos(int limite) {
         ArrayList<Paquete<T>> proximos = prioritarios.verPrimeros(limite);
         if (proximos.size() < limite) {

@@ -8,6 +8,7 @@ public class Cola<T> {
     private Nodo<T> ultimo;
     private int cantidad;
 
+    // O(1)
     public void encolar(T valor) {
         Nodo<T> nuevo = new Nodo<>(valor);
         if (estaVacia()) {
@@ -19,6 +20,7 @@ public class Cola<T> {
         cantidad++;
     }
 
+    // O(1)
     public T desencolar() {
         if (estaVacia()) {
             throw new NoSuchElementException("La cola esta vacia");
@@ -32,6 +34,7 @@ public class Cola<T> {
         return valor;
     }
 
+    // O(1)
     public T verPrimero() {
         if (estaVacia()) {
             throw new NoSuchElementException("La cola esta vacia");
@@ -39,14 +42,17 @@ public class Cola<T> {
         return primero.valor;
     }
 
+    // O(1)
     public boolean estaVacia() {
         return primero == null;
     }
 
+    // O(1)
     public int tamanio() {
         return cantidad;
     }
 
+    // O(n)
     public ArrayList<T> verPrimeros(int limite) {
         ArrayList<T> valores = new ArrayList<>();
         Nodo<T> actual = primero;

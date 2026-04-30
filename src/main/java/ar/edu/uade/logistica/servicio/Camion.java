@@ -14,30 +14,37 @@ public class Camion<T> {
         this.patente = patente;
     }
 
+    // O(1)
     public void cargar(Paquete<T> paquete) {
         carga.apilar(paquete);
     }
 
+    // O(1)
     public Paquete<T> descargar() {
         return carga.desapilar();
     }
 
+    // O(1)
     public Paquete<T> deshacerUltimaCarga() {
         return descargar();
     }
 
+    // O(1)
     public Paquete<T> verProximaDescarga() {
         return carga.verCima();
     }
 
+    // O(1)
     public String getPatente() {
         return patente;
     }
 
+    // O(1)
     public boolean estaVacio() {
         return carga.estaVacia();
     }
 
+    // O(1)
     public int cantidadPaquetes() {
         return carga.tamanio();
     }
