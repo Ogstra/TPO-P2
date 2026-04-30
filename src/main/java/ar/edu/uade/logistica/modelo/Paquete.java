@@ -24,30 +24,37 @@ public class Paquete<T> {
         this.contenido = contenido;
     }
 
+    // O(1)
     public String getId() {
         return id;
     }
 
+    // O(1)
     public double getPeso() {
         return peso;
     }
 
+    // O(1)
     public String getDestino() {
         return destino;
     }
 
+    // O(1)
     public boolean isUrgente() {
         return urgente;
     }
 
+    // O(1)
     public T getContenido() {
         return contenido;
     }
 
+    // O(1)
     public boolean requierePrioridad() {
         return urgente || peso > 50;
     }
 
+    // O(1)
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -60,11 +67,13 @@ public class Paquete<T> {
         return id.equals(paquete.getId());
     }
 
+    // O(1)
     @Override
     public int hashCode() {
         return id.hashCode();
     }
 
+    // O(1)
     @Override
     public String toString() {
         return "Paquete{" +

@@ -19,6 +19,7 @@ import java.util.List;
 public class InventarioLoader {
     private static final Gson gson = new Gson();
 
+    // O(n)
     public ArrayList<Paquete<Contenido>> cargarPaquetes(String archivo) throws IOException {
         try (FileReader reader = new FileReader(archivo)) {
             JsonObject raiz = gson.fromJson(reader, JsonObject.class);
@@ -47,6 +48,7 @@ public class InventarioLoader {
         }
     }
 
+    // O(n)
     public void guardarPaquetes(String archivo, List<Paquete<Contenido>> paquetes) throws IOException {
         JsonArray paquetesJson = new JsonArray();
 
@@ -69,6 +71,7 @@ public class InventarioLoader {
         }
     }
 
+    // O(1)
     private Contenido leerContenido(String tipoContenido, JsonObject contenidoJson) {
         switch (tipoContenido.toLowerCase()) {
             case "electronica":
@@ -82,6 +85,7 @@ public class InventarioLoader {
         }
     }
 
+    // O(1)
     private String obtenerTipoContenido(Contenido contenido) {
         if (contenido instanceof Electronica) {
             return "electronica";

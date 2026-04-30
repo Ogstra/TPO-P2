@@ -12,22 +12,27 @@ public class Electronica implements Contenido {
         this.asegurado = asegurado;
     }
 
+    // O(1)
     public String getDescripcion() {
         return descripcion;
     }
 
+    // O(1)
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
 
+    // O(1)
     public boolean isAsegurado() {
         return asegurado;
     }
 
+    // O(1)
     public void setAsegurado(boolean asegurado) {
         this.asegurado = asegurado;
     }
 
+    // O(1)
     @Override
     public String toString() {
         return "Electronica [descripcion=" + descripcion + ", asegurado=" + asegurado + "]";
