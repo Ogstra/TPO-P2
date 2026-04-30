@@ -36,8 +36,8 @@ public class MenuPrincipal {
         System.out.println("1. Crear paquete manual");
         System.out.println("2. Cargar siguiente paquete al camion");
         System.out.println("3. Deshacer ultima carga del camion");
-        System.out.println("4. Ver estado");
-        System.out.println("5. Listar proximos 10 paquetes");
+        System.out.println("4. Ver resumen del sistema");
+        System.out.println("5. Ver detalle completo");
         System.out.println("0. Salir");
     }
 
@@ -57,7 +57,7 @@ public class MenuPrincipal {
                     mostrarEstado();
                     break;
                 case 5:
-                    listarProximosPaquetes();
+                    verDetalleCompleto();
                     break;
                 case 0:
                     System.out.println("Fin del sistema");
@@ -119,7 +119,7 @@ public class MenuPrincipal {
     }
 
     private void mostrarEstado() {
-        System.out.println("Pendientes en centro: " + centro.cantidadPendiente());
+        System.out.println("\nPendientes en centro: " + centro.cantidadPendiente());
         System.out.println("Paquetes en camion: " + camion.cantidadPaquetes());
         if (!centro.estaVacio()) {
             System.out.println("Siguiente del centro:");
@@ -131,15 +131,24 @@ public class MenuPrincipal {
         }
     }
 
-    private void listarProximosPaquetes() {
-        ArrayList<Paquete<Contenido>> proximos = centro.verProximos(10);
-        if (proximos.isEmpty()) {
-            System.out.println("No hay paquetes pendientes en el centro");
-            return;
+    private void verDetalleCompleto() {
+        System.out.println();
+        System.out.println("=== CENTRO DE DISTRIBUCION (" + centro.cantidadPendiente() + " pendientes) ===");
+        ArrayList<Paquete<Contenido>> pendientes = centro.verProximos(centro.cantidadPendiente());
+        if (pendientes.isEmpty()) {
+            System.out.println("Sin paquetes pendientes.");
+        } else {
+            mostrarPaquetesEnTabla(pendientes);
         }
 
-        System.out.println("Proximos paquetes del centro:");
-        mostrarPaquetesEnTabla(proximos);
+        System.out.println();
+        System.out.println("=== CAMION " + camion.getPatente() + " (" + camion.cantidadPaquetes() + " paquetes) ===");
+        ArrayList<Paquete<Contenido>> carga = camion.listarCarga();
+        if (carga.isEmpty()) {
+            System.out.println("Camion vacio.");
+        } else {
+            mostrarPaquetesEnTabla(carga);
+        }
     }
 
     private int leerEntero(String mensaje) {

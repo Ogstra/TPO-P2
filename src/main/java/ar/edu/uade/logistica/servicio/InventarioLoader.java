@@ -16,10 +16,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+// Responsable de leer y escribir el inventario en formato JSON usando Gson.
+// Desacopla la persistencia del resto del sistema: ni CentroDistribucion ni
+// el menu conocen el formato del archivo.
 public class InventarioLoader {
     private static final Gson gson = new Gson();
 
     // O(n)
+    // Lee el archivo JSON, parsea cada elemento del array "paquetes" y
+    // construye los objetos Java correspondientes, incluyendo el subtipo de Contenido.
     public ArrayList<Paquete<Contenido>> cargarPaquetes(String archivo) throws IOException {
         try (FileReader reader = new FileReader(archivo)) {
             JsonObject raiz = gson.fromJson(reader, JsonObject.class);
@@ -49,6 +54,8 @@ public class InventarioLoader {
     }
 
     // O(n)
+    // Serializa la lista de paquetes a JSON y sobreescribe el archivo.
+    // Se usa para persistir el estado del centro luego de cada operacion.
     public void guardarPaquetes(String archivo, List<Paquete<Contenido>> paquetes) throws IOException {
         JsonArray paquetesJson = new JsonArray();
 
@@ -59,6 +66,7 @@ public class InventarioLoader {
             paqueteJson.addProperty("destino", paquete.getDestino());
             paqueteJson.addProperty("urgente", paquete.isUrgente());
             paqueteJson.addProperty("tipoContenido", obtenerTipoContenido(paquete.getContenido()));
+            // gson.toJsonTree serializa el objeto Contenido concreto con sus campos propios
             paqueteJson.add("contenido", gson.toJsonTree(paquete.getContenido()));
             paquetesJson.add(paqueteJson);
         }
@@ -72,6 +80,8 @@ public class InventarioLoader {
     }
 
     // O(1)
+    // Usa el campo "tipoContenido" del JSON para determinar que subclase instanciar.
+    // Gson deserializa los campos automaticamente por nombre.
     private Contenido leerContenido(String tipoContenido, JsonObject contenidoJson) {
         switch (tipoContenido.toLowerCase()) {
             case "electronica":
@@ -86,6 +96,7 @@ public class InventarioLoader {
     }
 
     // O(1)
+    // Mapea la clase Java del contenido al string que se guarda en el JSON.
     private String obtenerTipoContenido(Contenido contenido) {
         if (contenido instanceof Electronica) {
             return "electronica";

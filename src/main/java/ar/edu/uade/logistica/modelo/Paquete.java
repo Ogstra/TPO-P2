@@ -1,5 +1,9 @@
 package ar.edu.uade.logistica.modelo;
 
+// Unidad basica del sistema logistico.
+// Cada paquete tiene un ID unico, peso, destino, flag de urgencia y su contenido tipado.
+// La igualdad y el hashCode se definen solo por ID, lo que permite usar Paquete
+// en colecciones basadas en hash (HashSet, HashMap) con busqueda eficiente.
 public class Paquete<T> {
     private String id;
     private double peso;
@@ -50,11 +54,15 @@ public class Paquete<T> {
     }
 
     // O(1)
+    // Un paquete requiere prioridad si es urgente O pesa mas de 50 kg.
+    // Este criterio determina en que cola interna lo ubica ColaPrioridadPaquetes.
     public boolean requierePrioridad() {
         return urgente || peso > 50;
     }
 
     // O(1)
+    // Igualdad basada solo en ID: dos paquetes son el mismo si tienen el mismo ID,
+    // independientemente de peso, destino o contenido.
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -68,6 +76,7 @@ public class Paquete<T> {
     }
 
     // O(1)
+    // hashCode consistente con equals: solo depende del ID.
     @Override
     public int hashCode() {
         return id.hashCode();
