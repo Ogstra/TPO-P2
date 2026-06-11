@@ -1,0 +1,46 @@
+{
+  "depositos": [
+    {
+      "id": 50,
+      "nombre": "Hub Central Buenos Aires",
+      "visitado": false,
+      "fechaUltimaAuditoria": "2026-05-01T10:00:00",
+      "conexiones": [20, 80]
+    },
+    {
+      "id": 20,
+      "nombre": "Deposito Cordoba",
+      "visitado": false,
+      "fechaUltimaAuditoria": null,
+      "conexiones": [50, 10, 30]
+    },
+    {
+      "id": 80,
+      "nombre": "Deposito Rosario",
+      "visitado": false,
+      "fechaUltimaAuditoria": "2026-01-15T08:30:00",
+      "conexiones": [50, 70]
+    },
+    {
+      "id": 10,
+      "nombre": "Deposito Mendoza",
+      "visitado": false,
+      "fechaUltimaAuditoria": "2026-05-20T09:00:00",
+      "conexiones": [20]
+    },
+    {
+      "id": 30,
+      "nombre": "Deposito Tucuman",
+      "visitado": false,
+      "fechaUltimaAuditoria": null,
+      "conexiones": [20]
+    },
+    {
+      "id": 70,
+      "nombre": "Deposito Mar del Plata",
+      "visitado": false,
+      "fechaUltimaAuditoria": "2026-04-10T14:00:00",
+      "conexiones": [80]
+    }
+  ]
+}

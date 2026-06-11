@@ -2,14 +2,20 @@ package ar.edu.uade.logistica.menu;
 
 import ar.edu.uade.logistica.modelo.Alimento;
 import ar.edu.uade.logistica.modelo.Contenido;
+import ar.edu.uade.logistica.modelo.Deposito;
 import ar.edu.uade.logistica.modelo.Electronica;
 import ar.edu.uade.logistica.modelo.Fragil;
 import ar.edu.uade.logistica.modelo.Paquete;
 import ar.edu.uade.logistica.servicio.Camion;
 import ar.edu.uade.logistica.servicio.CentroDistribucion;
+import ar.edu.uade.logistica.servicio.DepositoLoader;
 import ar.edu.uade.logistica.servicio.InventarioLoader;
+import ar.edu.uade.logistica.tda.GrafoDepositos;
+import ar.edu.uade.logistica.tda.RedDepositos;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -20,8 +26,14 @@ public class MenuPrincipal {
     private InventarioLoader inventarioLoader = new InventarioLoader();
     private String rutaInventario = "src/main/resources/inventario.json";
 
+    private RedDepositos redDepositos = new RedDepositos();
+    private GrafoDepositos grafoDepositos = new GrafoDepositos();
+    private DepositoLoader depositoLoader = new DepositoLoader();
+    private String rutaDepositos = "src/main/resources/depositos.json";
+
     public void iniciar() {
         cargarInventarioInicial();
+        cargarDepositosInicial();
         int opcion;
         do {
             mostrarOpciones();
@@ -32,39 +44,37 @@ public class MenuPrincipal {
 
     private void mostrarOpciones() {
         System.out.println();
-        System.out.println("Logi UADE 2026 - Iteracion 1");
+        System.out.println("=== Logi UADE 2026 ===");
+        System.out.println("--- Iteracion 1: Paquetes ---");
         System.out.println("1. Crear paquete manual");
         System.out.println("2. Cargar siguiente paquete al camion");
         System.out.println("3. Deshacer ultima carga del camion");
         System.out.println("4. Ver estado");
         System.out.println("5. Listar proximos 10 paquetes");
+        System.out.println("--- Iteracion 2: Depositos ---");
+        System.out.println("6. Buscar deposito por ID");
+        System.out.println("7. Agregar deposito");
+        System.out.println("8. Ejecutar auditoria de depositos");
+        System.out.println("9. Ver depositos en nivel N");
+        System.out.println("10. Calcular distancia minima entre depositos");
         System.out.println("0. Salir");
     }
 
     private void ejecutar(int opcion) {
         try {
             switch (opcion) {
-                case 1:
-                    crearPaqueteManual();
-                    break;
-                case 2:
-                    cargarCamion();
-                    break;
-                case 3:
-                    deshacerCarga();
-                    break;
-                case 4:
-                    mostrarEstado();
-                    break;
-                case 5:
-                    listarProximosPaquetes();
-                    break;
-                case 0:
-                    System.out.println("Fin del sistema");
-                    break;
-                default:
-                    System.out.println("Opcion invalida");
-                    break;
+                case 1: crearPaqueteManual(); break;
+                case 2: cargarCamion(); break;
+                case 3: deshacerCarga(); break;
+                case 4: mostrarEstado(); break;
+                case 5: listarProximosPaquetes(); break;
+                case 6: buscarDeposito(); break;
+                case 7: agregarDeposito(); break;
+                case 8: ejecutarAuditoria(); break;
+                case 9: verDepositosEnNivel(); break;
+                case 10: calcularDistanciaMinima(); break;
+                case 0: System.out.println("Fin del sistema"); break;
+                default: System.out.println("Opcion invalida"); break;
             }
         } catch (RuntimeException | IOException e) {
             System.out.println("Error: " + e.getMessage());
@@ -77,6 +87,99 @@ public class MenuPrincipal {
             System.out.println("Inventario cargado automaticamente desde " + rutaInventario);
         } catch (RuntimeException | IOException e) {
             System.out.println("No se pudo cargar el inventario inicial: " + e.getMessage());
+        }
+    }
+
+    private void cargarDepositosInicial() {
+        try {
+            depositoLoader.cargar(rutaDepositos, redDepositos, grafoDepositos);
+            System.out.println("Depositos cargados automaticamente desde " + rutaDepositos);
+        } catch (RuntimeException | IOException e) {
+            System.out.println("No se pudo cargar los depositos: " + e.getMessage());
+        }
+    }
+
+    private void buscarDeposito() {
+        int id = leerEntero("ID del deposito: ");
+        Deposito deposito = redDepositos.buscar(id);
+        if (deposito == null) {
+            System.out.println("Deposito no encontrado");
+        } else {
+            System.out.println(deposito);
+        }
+    }
+
+    private void agregarDeposito() throws IOException {
+        int id = leerEntero("ID: ");
+        System.out.print("Nombre: ");
+        String nombre = scanner.nextLine();
+
+        // fecha ultima auditoria (opcional)
+        LocalDateTime fechaAuditoria = null;
+        System.out.print("Fecha ultima auditoria [yyyy-MM-ddTHH:mm:ss] (Enter para omitir): ");
+        String fechaStr = scanner.nextLine().trim();
+        if (!fechaStr.isBlank()) {
+            try {
+                fechaAuditoria = LocalDateTime.parse(fechaStr);
+            } catch (DateTimeParseException e) {
+                System.out.println("Formato invalido, se deja sin fecha de auditoria");
+            }
+        }
+
+        Deposito deposito = new Deposito(id, nombre, false, fechaAuditoria);
+        redDepositos.insertar(deposito);
+        grafoDepositos.agregarVertice(id);
+
+        // conexiones con otros depositos
+        System.out.print("IDs de depositos a conectar separados por coma (Enter para omitir): ");
+        String conexionesStr = scanner.nextLine().trim();
+        if (!conexionesStr.isBlank()) {
+            for (String parte : conexionesStr.split(",")) {
+                try {
+                    int idVecino = Integer.parseInt(parte.trim());
+                    if (grafoDepositos.existeVertice(idVecino) &&
+                            !grafoDepositos.obtenerVecinos(id).contains(idVecino)) {
+                        grafoDepositos.agregarArista(id, idVecino);
+                    } else if (!grafoDepositos.existeVertice(idVecino)) {
+                        System.out.println("Deposito " + idVecino + " no existe, conexion omitida");
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println("ID invalido: " + parte.trim());
+                }
+            }
+        }
+
+        guardarDepositos();
+        System.out.println("Deposito agregado: " + deposito);
+    }
+
+    private void ejecutarAuditoria() throws IOException {
+        redDepositos.auditoria();
+        guardarDepositos();
+        System.out.println("Auditoria completada (post-orden). Depositos sin auditoria reciente marcados como visitados.");
+    }
+
+    private void verDepositosEnNivel() {
+        int nivel = leerEntero("Nivel (raiz = 0): ");
+        ArrayList<Deposito> depositos = redDepositos.depositosEnNivel(nivel);
+        if (depositos.isEmpty()) {
+            System.out.println("No hay depositos en el nivel " + nivel);
+        } else {
+            System.out.println("Depositos en nivel " + nivel + ":");
+            for (Deposito d : depositos) {
+                System.out.println("  " + d);
+            }
+        }
+    }
+
+    private void calcularDistanciaMinima() {
+        int origen = leerEntero("ID deposito origen: ");
+        int destino = leerEntero("ID deposito destino: ");
+        int distancia = grafoDepositos.distanciaMinima(origen, destino);
+        if (distancia == -1) {
+            System.out.println("No existe camino entre los depositos " + origen + " y " + destino);
+        } else {
+            System.out.println("Distancia minima entre " + origen + " y " + destino + ": " + distancia + " salto(s)");
         }
     }
 
@@ -266,5 +369,9 @@ public class MenuPrincipal {
 
     private void guardarCentroEnJson() throws IOException {
         inventarioLoader.guardarPaquetes(rutaInventario, centro.verProximos(centro.cantidadPendiente()));
+    }
+
+    private void guardarDepositos() throws IOException {
+        depositoLoader.guardar(rutaDepositos, redDepositos, grafoDepositos);
     }
 }
